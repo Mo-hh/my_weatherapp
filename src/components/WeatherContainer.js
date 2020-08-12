@@ -2,6 +2,9 @@ import { Box, Text, Heading } from "@chakra-ui/core";
 import React, { useState } from "react";
 import { SearchForm } from "./";
 import ky from "ky";
+import groupby from "lodash.groupby";
+
+const TODAY = new Date().toISOString().split("T")[0];
 
 export const WeatherContainer = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -25,8 +28,27 @@ export const WeatherContainer = () => {
         })
         .json();
 
-      setData(result);
-      console.log(result);
+      const listWithDateTime = result.list.map((data) => {
+        const [date, time] = data?.dt_txt.split(" ");
+
+        return {
+          ...data,
+          date,
+          time,
+        };
+      });
+
+      const groupedList = groupby(listWithDateTime, "date");
+
+      const { [TODAY]: ignoredTodayObject, ...restDaysList } = groupedList;
+
+      const newResult = {
+        ...result,
+        list: restDaysList,
+      };
+
+      setData(newResult);
+      console.log(newResult);
     } catch (error) {
       setIsError(true);
     }
@@ -51,7 +73,6 @@ export const WeatherContainer = () => {
       />
       {isError && <Text color='red.500'>City not found</Text>}
       {data?.city?.name && <Heading>{data?.city?.name}</Heading>}
-      {data && data.city && data.city.name && ()}
 
       <Box>days</Box>
       <Box>hourly forcase</Box>
