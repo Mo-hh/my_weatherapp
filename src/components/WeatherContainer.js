@@ -1,6 +1,6 @@
-import { Box, Text, Heading } from "@chakra-ui/core";
+import { Box, Text, Heading, Grid } from "@chakra-ui/core";
 import React, { useState } from "react";
-import { SearchForm } from "./";
+import { DayItem, SearchForm } from "./";
 import ky from "ky";
 import groupby from "lodash.groupby";
 
@@ -11,6 +11,7 @@ export const WeatherContainer = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -72,9 +73,26 @@ export const WeatherContainer = () => {
         fetchData={fetchData}
       />
       {isError && <Text color='red.500'>City not found</Text>}
-      {data?.city?.name && <Heading>{data?.city?.name}</Heading>}
+      {data?.city?.name && (
+        <Heading mb={4}>
+          {data?.city?.name}, {data?.city?.country}
+        </Heading>
+      )}
 
-      <Box>days</Box>
+      {data?.list && (
+        <Grid gridGap={4} mb={4} gridTemplateColumns={"repeat(5,1fr)"}>
+          {Object.entries(data?.list).map(([date, list]) => (
+            <DayItem
+              key={date}
+              id={date}
+              list={list}
+              isSelected={selectedDate === date}
+              SetActive={() => setSelectedDate(date)}
+            />
+          ))}
+        </Grid>
+      )}
+
       <Box>hourly forcase</Box>
     </Box>
   );

@@ -8,7 +8,7 @@ export const SearchForm = ({
   fetchData,
 }) => {
   return (
-    <Flex>
+    <Flex mb={4}>
       <Input
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
