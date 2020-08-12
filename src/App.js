@@ -1,13 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+import theme from "../theme";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-     
-    </div>
+    <ThemeProvider theme={theme}>
+      <CSSReset />
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
