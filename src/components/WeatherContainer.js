@@ -43,6 +43,12 @@ export const WeatherContainer = () => {
 
       const { [TODAY]: ignoredTodayObject, ...restDaysList } = groupedList;
 
+      const firstDate = Object.keys(restDaysList)?.[0];
+
+      if (firstDate) {
+        setSelectedDate(firstDate);
+      }
+
       const newResult = {
         ...result,
         list: restDaysList,

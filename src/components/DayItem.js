@@ -31,7 +31,8 @@ export const DayItem = ({ id, list, isSelected, SetActive }) => {
       <Text fontSize='sm'>
         <Text as='span' color='gray.500'>
           {maxTemp}°
-        </Text>{" "}
+        </Text>
+        {"  "}
         <Text as='span'>{minTemp}°</Text>
       </Text>
     </Button>
