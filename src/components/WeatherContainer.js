@@ -1,6 +1,6 @@
-import { Box, Text, Heading, Grid } from "@chakra-ui/core";
+import { Box, Text, Heading, Grid, Flex } from "@chakra-ui/core";
 import React, { useState } from "react";
-import { DayItem, SearchForm } from "./";
+import { DayItem, SearchForm, HourItem } from "./";
 import ky from "ky";
 import groupby from "lodash.groupby";
 
@@ -30,12 +30,11 @@ export const WeatherContainer = () => {
         .json();
 
       const listWithDateTime = result.list.map((data) => {
-        const [date, time] = data?.dt_txt.split(" ");
+        const [date, _] = data?.dt_txt.split(" ");
 
         return {
           ...data,
           date,
-          time,
         };
       });
 
@@ -86,7 +85,11 @@ export const WeatherContainer = () => {
       )}
 
       {data?.list && (
-        <Grid gridGap={4} mb={4} gridTemplateColumns={"repeat(5,1fr)"}>
+        <Grid
+          gridGap={4}
+          mb={12}
+          gridTemplateColumns={["repeat(3,1fr)", "repeat(5,1fr)"]}
+        >
           {Object.entries(data?.list).map(([date, list]) => (
             <DayItem
               key={date}
@@ -99,7 +102,20 @@ export const WeatherContainer = () => {
         </Grid>
       )}
 
-      <Box>hourly forcase</Box>
+      {data?.list && (
+        <Flex justifyContent='center'>
+          <Grid gridGap={4} width={["full", 1 / 2]}>
+            {selectedDate &&
+              data?.list?.[selectedDate]?.map((hourData, index) => (
+                <HourItem
+                  key={hourData?.dt}
+                  isLast={data?.list?.[selectedDate]?.length === index + 1}
+                  {...hourData}
+                />
+              ))}
+          </Grid>
+        </Flex>
+      )}
     </Box>
   );
 };
