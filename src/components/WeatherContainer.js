@@ -1,17 +1,24 @@
 import { Box, Text, Heading, Grid, Flex } from "@chakra-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DayItem, SearchForm, HourItem } from "./";
 import ky from "ky";
 import groupby from "lodash.groupby";
+import { useParams } from "react-router-dom";
 
 const TODAY = new Date().toISOString().split("T")[0];
 
 export const WeatherContainer = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const { cityName } = useParams();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+
+  useEffect(() => {
+    if (cityName) {
+      fetchData();
+    }
+  }, [cityName]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -19,7 +26,7 @@ export const WeatherContainer = () => {
     try {
       const searchParams = new URLSearchParams();
 
-      searchParams.append("q", searchValue);
+      searchParams.append("q", cityName);
       searchParams.append("appid", "24e76e893d88a408ec9ca1575eafdbc0");
       searchParams.append("units", "metric");
 
@@ -52,9 +59,9 @@ export const WeatherContainer = () => {
         ...result,
         list: restDaysList,
       };
+      console.log(newResult);
 
       setData(newResult);
-      console.log(newResult);
     } catch (error) {
       setIsError(true);
     }
@@ -71,12 +78,7 @@ export const WeatherContainer = () => {
       mx='4'
       maxWidth='4xl'
     >
-      <SearchForm
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        isLoading={isLoading}
-        fetchData={fetchData}
-      />
+      <SearchForm isLoading={isLoading} fetchData={fetchData} />
       {isError && <Text color='red.500'>City not found</Text>}
       {data?.city?.name && (
         <Heading mb={4}>

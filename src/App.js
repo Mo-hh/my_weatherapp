@@ -2,13 +2,7 @@ import React from "react";
 import { ThemeProvider, CSSReset, Flex } from "@chakra-ui/core";
 import { WeatherContainer } from "./components";
 import theme from "./theme";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
   return (
