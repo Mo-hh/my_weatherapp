@@ -1,14 +1,13 @@
 import React from "react";
-import { ThemeProvider, CSSReset, Flex } from "@chakra-ui/core";
-import { WeatherContainer } from "./components";
-import theme from "./theme";
+import { ThemeProvider, CSSReset, Flex, theme } from "@chakra-ui/core";
+import { WeatherContainer, Header, Footer } from "./components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CSSReset />
-
+      <Header />
       <Router>
         <Flex
           backgroundColor='gray.100'
@@ -26,6 +25,7 @@ const App = () => {
           </Switch>
         </Flex>
       </Router>
+      <Footer />
     </ThemeProvider>
   );
 };

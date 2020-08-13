@@ -5,7 +5,7 @@ export const HourItem = ({ weather, main, dt, isLast }) => {
   const { icon, description } = weather?.[0];
   const { temp } = main;
 
-  const dtPlusOneHour = dt + 60 * 60; //! adding one hour(60 sec * 60 Min) to orginal dt
+  const dtPlusOneHour = dt + 3 * 60 * 60; //* adding three hours(60 sec * 60 Min) to orginal dt
 
   const timeObject = new Date(dt * 1000);
   const timePlusOneHourObject = new Date(dtPlusOneHour * 1000);

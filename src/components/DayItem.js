@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Image, Text, Button } from "@chakra-ui/core";
 
-export const DayItem = ({ id, list, isSelected, SetActive }) => {
-  const dayObject = new Date(id);
+export const DayItem = ({ date, list, isSelected, SetActive }) => {
+  const dayObject = new Date(date);
   const dayName = dayObject.toLocaleDateString("en", { weekday: "short" });
-  const { icon } = list?.[0]?.weather?.[0];
+  const { icon } = list?.[0]?.weather?.[0] || list?.[0]?.weather?.[0];
+  //* list && list[0] && list[0].weather && list[0].weather[0] && list[0].weather[0].icon
 
   const maxTempArray = list?.map(({ main: { temp_max } }) => temp_max);
   const minTempArray = list?.map(({ main: { temp_min } }) => temp_min);

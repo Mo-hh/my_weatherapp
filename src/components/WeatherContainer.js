@@ -14,11 +14,13 @@ export const WeatherContainer = () => {
   const [isError, setIsError] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (cityName) {
       fetchData();
     }
   }, [cityName]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -37,7 +39,10 @@ export const WeatherContainer = () => {
         .json();
 
       const listWithDateTime = result.list.map((data) => {
-        const [date, _] = data?.dt_txt.split(" ");
+        //* convert dateTime string to an array of [date,time]
+        //* we need date to group the result by date.
+        // eslint-disable-next-line no-unused-vars
+        const [date, time] = data?.dt_txt.split(" "); //  ? //
 
         return {
           ...data,
@@ -47,9 +52,10 @@ export const WeatherContainer = () => {
 
       const groupedList = groupby(listWithDateTime, "date");
 
-      const { [TODAY]: ignoredTodayObject, ...restDaysList } = groupedList;
+      const { [TODAY]: _ignoredTodayObject, ...restDaysList } = groupedList;
 
       const firstDate = Object.keys(restDaysList)?.[0];
+      console.log(firstDate);
 
       if (firstDate) {
         setSelectedDate(firstDate);
@@ -95,7 +101,7 @@ export const WeatherContainer = () => {
           {Object.entries(data?.list).map(([date, list]) => (
             <DayItem
               key={date}
-              id={date}
+              date={date}
               list={list}
               isSelected={selectedDate === date}
               SetActive={() => setSelectedDate(date)}
@@ -108,10 +114,10 @@ export const WeatherContainer = () => {
         <Flex justifyContent='center'>
           <Grid gridGap={4} width={["full", 1 / 2]}>
             {selectedDate &&
-              data?.list?.[selectedDate]?.map((hourData, index) => (
+              data?.list?.[selectedDate]?.map((hourData, index, array) => (
                 <HourItem
                   key={hourData?.dt}
-                  isLast={data?.list?.[selectedDate]?.length === index + 1}
+                  isLast={array?.length === index + 1}
                   {...hourData}
                 />
               ))}
